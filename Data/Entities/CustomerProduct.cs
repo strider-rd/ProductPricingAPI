@@ -10,6 +10,7 @@ namespace Entities
 
         [ForeignKey(nameof(Product))]
         public Guid ProductId { get; set; }
+        public Product product {get; set;}
         public string price { get; set; }
     }
 }

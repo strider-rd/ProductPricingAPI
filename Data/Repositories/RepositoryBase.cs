@@ -25,7 +25,7 @@ namespace Repositories
       _repositoryContext.SaveChanges();
     }
 
-    public IQueryable<T> FindAll() => _repositoryContext.Set<T>().AsNoTracking();
+    public virtual IQueryable<T> FindAll() => _repositoryContext.Set<T>().AsNoTracking();
 
     public IQueryable<T> FindByCondition(System.Linq.Expressions.Expression<Func<T, bool>> expression) => 
       _repositoryContext.Set<T>().Where(expression).AsNoTracking();

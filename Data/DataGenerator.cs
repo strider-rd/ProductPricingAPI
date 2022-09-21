@@ -49,6 +49,8 @@ namespace Data
             ProductId = productInContext.ProductId,
             price = sp.price
           };
+
+          context.CustomerProducts.Add(customerProduct);
         }
       }
 
