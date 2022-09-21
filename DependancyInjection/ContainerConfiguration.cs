@@ -1,4 +1,4 @@
-using Data;
+using Repositories;
 using Services;
 
 namespace ConfigureContainers
@@ -7,8 +7,9 @@ namespace ConfigureContainers
   {
     public static void ConfigureContainers(this IServiceCollection services)
     {
-      services.AddSingleton<IDataService, DataService>();
       services.AddTransient<IProductService, ProductService>();
+      services.AddScoped<ICustomerProductRepository, CustomerProductRepository>();
+      services.AddScoped<IProductRepository, ProductRepository>();
     }
   }
 }

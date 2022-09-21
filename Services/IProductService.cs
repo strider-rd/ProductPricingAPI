@@ -1,13 +1,13 @@
-using Models;
+using Entities;
 
 namespace Services
 {
   public interface IProductService
   {
-    ProductRoot GetProducts();
-    Product GetProductById(string ean);
+    IEnumerable<Product> GetProducts();
+    IQueryable<Product> GetProductById(string ean);
     Product CreateNewProduct(Product newProduct);
-    Product UpdateProduct(Product updateProduct);
-    bool DeleteProductById(string ean);
+    void UpdateProduct(Product updateProduct);
+    void DeleteProductById(Product product);
   }
 }

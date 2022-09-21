@@ -1,8 +1,7 @@
 namespace Controllers
 {
-  
+  using Entities;
   using Microsoft.AspNetCore.Mvc;
-  using Models;
   using Services;
 
   [ApiController]
@@ -17,31 +16,42 @@ namespace Controllers
     }
 
     [HttpGet(Name = "GetAllProducts")]
-    public ProductRoot GetAllProducts()
+    public ActionResult<IEnumerable<Product>> GetAllProducts()
     {
-      return _productService.GetProducts();
+      return Ok(_productService.GetProducts());
     }
 
     [HttpGet("{ean}")]
     public ActionResult<Product> GetProducts(string ean) => 
-            _productService.GetProductById(ean) ?? new ActionResult<Product>(NotFound());
+            _productService.GetProductById(ean).FirstOrDefault() ?? new ActionResult<Product>(NotFound());
 
     [HttpPost(Name = "CreateProduct")]
-    public Product CreateProduct([FromBody]Product product)
+    public ActionResult<Product> CreateProduct([FromBody]Product product)
     {
-      return _productService.CreateNewProduct(product);
+      return Ok(_productService.CreateNewProduct(product));
     }
 
     [HttpPut(Name = "UpdateProduct")]
-    public Product UpdateProduct([FromBody]Product product)
-    { 
-      return _productService.UpdateProduct(product);
+    public IActionResult UpdateProduct([FromBody]Product product)
+    {
+      try
+      {
+        _productService.UpdateProduct(product);
+        return Ok();
+      }
+      catch (System.Exception)
+      {
+        return NotFound();
+      }
     }
 
     [HttpDelete("{ean}")]
-    public bool DeleteProduct([FromRoute]string ean)
+    public IActionResult DeleteProduct([FromRoute]string ean)
     {
-      return _productService.DeleteProductById(ean);
+      var existingProduct = _productService.GetProductById(ean).FirstOrDefault();
+      if (existingProduct == null) return NotFound();
+      _productService.DeleteProductById(existingProduct);
+      return Ok(true);
     }
   }
 }

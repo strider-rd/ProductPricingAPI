@@ -1,39 +1,34 @@
-using Data;
-using Models;
+using Entities;
+using Repositories;
 
 namespace Services
 {
   public class ProductService : IProductService
   {
-    private IDataService _dataService { get; }
-    public ProductService(IDataService dataService)
+    public IProductRepository _productRepository { get; }
+
+    public ProductService(IProductRepository productRepository)
     {
-      _dataService = dataService;
+      _productRepository = productRepository;
     }
 
-    public ProductRoot GetProducts()
+    public IEnumerable<Product> GetProducts()
     {
-      return _dataService.GetProducts();
+      return _productRepository.FindAll();
     }
 
-    public Product GetProductById(string ean)
+    public IQueryable<Product> GetProductById(string ean)
     {
-      return _dataService.GetProductById(ean);
+      return _productRepository.FindByCondition(x => x.ean == ean);
     }
 
-    public Product CreateNewProduct(Product newProduct)
-    {
-      return _dataService.CreateNewProduct(newProduct);
-    }
+    public Product CreateNewProduct(Product newProduct) =>
+      _productRepository.Create(newProduct);
 
-    public Product UpdateProduct(Product updatedProduct)
-    {
-      return _dataService.UpdateExistingProduct(updatedProduct);
-    }
+    public void UpdateProduct(Product updateProduct) => 
+      _productRepository.Update(updateProduct);
 
-    public bool DeleteProductById(string ean)
-    {
-      return _dataService.DeleteProductById(ean);
-    }
+    public void DeleteProductById(Product product) => 
+      _productRepository.Delete(product);
   }
 }
