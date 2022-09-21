@@ -1,4 +1,3 @@
-using Entities;
 using Microsoft.AspNetCore.Mvc;
 using Services;
 
@@ -15,9 +14,15 @@ namespace Controllers
     }
 
     [HttpGet()]
-    public ActionResult<IEnumerable<CustomerProduct>> GetAll()
+    public IActionResult GetAll()
     {
       return Ok(_userProductService.GetCustomerProduct());
+    }
+
+    [HttpGet("{customerName}")]
+    public IActionResult GetByCustomerName(string customerName)
+    {
+      return Ok(_userProductService.GetCustomerProductByName(customerName));
     }
   }
 }

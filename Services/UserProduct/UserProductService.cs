@@ -25,16 +25,16 @@ namespace Services
 
     public IEnumerable<SpecificPrices> GetCustomerProduct()
     {
-      var specificPrices = _customerProductRepository.FindAll()
-        .GroupBy(x => x.customer)
-        .Select(x => new SpecificPrices { customer = x.Key, products = x.Select(y => new Product { ProductId = y.ProductId, ean = y.product.ean, price = y.price }).ToList()});
+      var specificPrices = _customerProductRepository.FindAll().ToSpecificPrices();
       return specificPrices;
     }
 
-    // public IQueryable<CustomerProduct> GetCustomerProductByName(string customerName)
-    // {
-    //   throw new NotImplementedException();
-    // }
+    public IQueryable<SpecificPrices> GetCustomerProductByName(string customerName)
+    {
+      var specificPrices = _customerProductRepository.FindByCondition(x => x.customer.ToLower() == customerName.ToLower())
+                                                      .ToSpecificPrices();
+      return specificPrices;
+    }
 
     // public void UpdateCustomerProduct(CustomerProduct updateProduct)
     // {
